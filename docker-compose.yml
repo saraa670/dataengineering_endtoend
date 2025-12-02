@@ -1,0 +1,78 @@
+version: "3.8"
+
+services:
+
+  postgres:
+    image: postgres:15
+    container_name: postgres
+    environment:
+      POSTGRES_USER: aw_user
+      POSTGRES_PASSWORD: aw_pass
+      POSTGRES_DB: adventureworks
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    restart: unless-stopped
+
+  minio:
+    image: minio/minio:latest
+    container_name: minio
+    environment:
+      MINIO_ROOT_USER: minioadmin
+      MINIO_ROOT_PASSWORD: minioadmin
+    command: server /data --console-address ":9001"
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    volumes:
+      - minio_data:/data
+    restart: unless-stopped
+
+  airflow-webserver:
+    image: apache/airflow:2.9.2
+    container_name: airflow-webserver
+    environment:
+      AIRFLOW__CORE__LOAD_EXAMPLES: "False"
+      AIRFLOW__CORE__EXECUTOR: LocalExecutor
+    ports:
+      - "8081:8080"
+    volumes:
+      - ./dags:/opt/airflow/dags
+      - ./scripts:/opt/airflow/scripts
+      - ./config:/opt/airflow/config
+    command: webserver
+    depends_on:
+      - postgres
+      - minio
+    restart: unless-stopped
+
+  airflow-scheduler:
+    image: apache/airflow:2.9.2
+    container_name: airflow-scheduler
+    environment:
+      AIRFLOW__CORE__LOAD_EXAMPLES: "False"
+      AIRFLOW__CORE__EXECUTOR: LocalExecutor
+    volumes:
+      - ./dags:/opt/airflow/dags
+      - ./scripts:/opt/airflow/scripts
+      - ./config:/opt/airflow/config
+    command: scheduler
+    depends_on:
+      - postgres
+      - minio
+    restart: unless-stopped
+
+  jupyter:
+    image: jupyter/minimal-notebook:python-3.10
+    container_name: jupyter
+    ports:
+      - "8889:8888"
+    volumes:
+      - ./notebooks:/home/jovyan/work
+      - ./data:/data
+    restart: unless-stopped
+
+volumes:
+  postgres_data:
+  minio_data:

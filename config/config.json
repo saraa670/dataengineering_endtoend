@@ -1,0 +1,27 @@
+{
+  "minio": {
+    "endpoint": "http://localhost:9000",
+    "access_key": "minioadmin",
+    "secret_key": "minioadmin",
+    "bucket": "adventureworks"
+  },
+
+  "postgres": {
+    "host": "localhost",
+    "port": 5432,
+    "database": "adventureworks",
+    "user": "aw_user",
+    "password": "aw_pass"
+  },
+
+  "api": {
+    "base_url": "https://demodata.grapecity.com",
+    "timeout": 60
+  },
+
+  "paths": {
+    "local_raw_folder": "./data/raw",
+    "landing_prefix": "landing",
+    "landing_local": "./landing"
+  }
+}

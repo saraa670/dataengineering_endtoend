@@ -1,0 +1,5 @@
+{
+    "python.analysis.extraPaths": [
+        "./scripts/extract_csv_to_"
+    ]
+}
