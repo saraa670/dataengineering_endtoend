@@ -1,0 +1,35 @@
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+env/
+.env
+
+# Data & outputs
+data/
+outputs/
+*.parquet
+*.zip
+*.sqlite
+
+# Jupyter
+.ipynb_checkpoints/
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Credentials
+configs/config.json
+.env
+
+# Docker
+docker-compose.yml
+
+# Logs
+*.log
